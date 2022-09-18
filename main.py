@@ -4,6 +4,7 @@ import re
 import json
 import time
 from dotenv import dotenv_values
+import sys
 
 
 def read_a_post(reddit, subreddit_name):
@@ -45,8 +46,8 @@ def check_if_mentioned(reddit):
     # with those in .txt file they are not processed rest are processed
 
     mentioned = []
-    if os.path.isfile('mentioned_posts.txt'):
-        with open('mentioned_posts.txt', 'r') as f:
+    if os.path.isfile(os.path.join(path, 'mentioned_posts.txt')):
+        with open(os.path.join(path, 'mentioned_posts.txt') , 'r') as f:
             mentioned = f.read()
             mentioned = mentioned.split('\n')
             mentioned = list(filter(None, mentioned[:10]))
@@ -55,7 +56,7 @@ def check_if_mentioned(reddit):
         if mention.id in mentioned:
             continue
         mentioned.append(mention.id)
-        mention.reply('Dekh Chutiye Kam kar raha h na? 1227')
+        mention.reply('Working {}'.format(time.ctime()))
 
         # reply_to_mention(reddit)
 
@@ -69,7 +70,7 @@ def check_if_mentioned(reddit):
         mention.reply("Read it -- {}".format(time.ctime()))
         '''
     # Writes the 10 last comments which have been replied to
-    with open('mentioned_posts.txt', 'w') as f:
+    with open(os.path.join(path, 'mentioned_posts.txt'), 'w') as f:
         f.writelines('\n'.join(mentioned))
         '''
         Need to split mention_body to correlate any words that can be altered in the context of words transaltion.
@@ -96,7 +97,9 @@ def main():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    config = dotenv_values(".env")
+    path = "C:\Drive D\Personal Projects\\01 Reddit Bot"
+    config = dotenv_values(os.path.join(path, ".env"))
+
     main()
 
 
