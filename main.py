@@ -6,12 +6,6 @@ import time
 from dotenv import dotenv_values
 
 
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 def read_a_post(reddit, subreddit_name):
     subreddit = reddit.subreddit(subreddit_name)
 
@@ -46,6 +40,10 @@ def reply_to_post(reddit, subreddit_name):
 # A reply to u/botty-bot message with reference to username is not considered as a mention but as reply of a comment
 def check_if_mentioned(reddit):
     # Should limit the reiteration of the previous mention using a set of length 5 or so
+    # Checks for presence fo a file mentioned_posts.txt and Opens the file mentioned_posts.txt to read the contents
+    # and get 10 last mentions which have been replied to. Then we check for mentions in the inbox and if the id matches
+    # with those in .txt file they are not processed rest are processed
+
     mentioned = []
     if os.path.isfile('mentioned_posts.txt'):
         with open('mentioned_posts.txt', 'r') as f:
@@ -53,11 +51,11 @@ def check_if_mentioned(reddit):
             mentioned = mentioned.split('\n')
             mentioned = list(filter(None, mentioned[:10]))
 
-    for mention in reddit.inbox.mentions(limit=None):
+    for mention in reddit.inbox.mentions(limit=10):
         if mention.id in mentioned:
             continue
         mentioned.append(mention.id)
-        mention.reply('Dekh Chutiye Kam kar raha h na?')
+        mention.reply('Dekh Chutiye Kam kar raha h na? 1227')
 
         # reply_to_mention(reddit)
 
@@ -70,7 +68,7 @@ def check_if_mentioned(reddit):
         print("Processed Body: ", mention_body)
         mention.reply("Read it -- {}".format(time.ctime()))
         '''
-
+    # Writes the 10 last comments which have been replied to
     with open('mentioned_posts.txt', 'w') as f:
         f.writelines('\n'.join(mentioned))
         '''
