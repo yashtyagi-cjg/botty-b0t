@@ -100,6 +100,8 @@ if __name__ == '__main__':
     path = "C:\Drive D\Personal Projects\\01 Reddit Bot"
     config = dotenv_values(os.path.join(path, ".env"))
 
-    main()
+    while True:
+        main()
+        time.sleep(10)
 
 
