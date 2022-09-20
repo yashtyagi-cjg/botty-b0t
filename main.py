@@ -46,6 +46,8 @@ def check_if_mentioned(reddit):
     # with those in .txt file they are not processed rest are processed
 
     mentioned = []
+    new_mentioned = []
+
     if os.path.isfile(os.path.join(path, 'mentioned_posts.txt')):
         with open(os.path.join(path, 'mentioned_posts.txt') , 'r') as f:
             mentioned = f.read()
@@ -55,12 +57,14 @@ def check_if_mentioned(reddit):
     for mention in reddit.inbox.mentions(limit=10):
         if mention.id in mentioned:
             continue
-        mentioned.append(mention.id)
-        mention.reply('Working {}'.format(time.ctime()))
+        new_mentioned.append(mention.id)
+        mention.reply('Working OMEN {}'.format(time.ctime()))
 
-        # reply_to_mention(reddit)
+    print(mentioned)
+    print(new_mentioned)
+    # reply_to_mention(reddit)
 
-        '''
+    '''
         print("Author: ", mention.author)
         # Removing the call to u/botty-b0t so that the rest of the arguments can be easily processed
         mention_body = mention.body
@@ -68,9 +72,11 @@ def check_if_mentioned(reddit):
         print("Body: ", mention.body)
         print("Processed Body: ", mention_body)
         mention.reply("Read it -- {}".format(time.ctime()))
-        '''
+    '''
     # Writes the 10 last comments which have been replied to
     with open(os.path.join(path, 'mentioned_posts.txt'), 'w') as f:
+        f.writelines('\n'.join(new_mentioned))
+        f.writelines('\n')
         f.writelines('\n'.join(mentioned))
         '''
         Need to split mention_body to correlate any words that can be altered in the context of words transaltion.
@@ -92,16 +98,15 @@ def main():
     # for submission in reddit.front.hot(limit=5):
     #     print(submission.id, submission)
     # reply_to_post(reddit, 'tryingout_bottesting')
-    check_if_mentioned(reddit)
+    while True:
+        check_if_mentioned(reddit)
+        time.sleep(22)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     path = "C:\Drive D\Personal Projects\\01 Reddit Bot"
     config = dotenv_values(os.path.join(path, ".env"))
-
-    while True:
-        main()
-        time.sleep(10)
+    main()
 
 
